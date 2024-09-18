@@ -3,7 +3,7 @@ title: "How did Covid-19 affect the number of marriages"
 subtitle: "Evidence from the Toronto"
 author: 
   - Rohan Alexander
-thanks: "Code and data are available at: LINK."
+thanks: "Code and data are available at: https://github.com/RohanAlexander/marriage."
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
@@ -25,7 +25,7 @@ data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+You can and should cross-reference sections and sub-sections. We use @citeR and @kjlaskjasdnaf.
 
 The remainder of this paper is structured as follows. @sec-data....
 
@@ -33,10 +33,10 @@ The remainder of this paper is structured as follows. @sec-data....
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+Some of our data is of penguins (@fig-asdfafdesadfsdfas), from @palmerpenguins.
 
 ```{r}
-#| label: fig-bills
+#| label: fig-asdfafdesadfsdfas
 #| fig-cap: Number of marriage licenses in Toronto, by civic center (2011 - 2024)
 #| echo: false
 
