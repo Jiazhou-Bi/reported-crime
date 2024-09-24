@@ -1,31 +1,36 @@
 ---
 title: "How did Covid-19 affect the number of marriages"
-subtitle: "Evidence from the Toronto"
+subtitle: "Evidence from Toronto"
 author: 
-  - Rohan Alexander
+  - Justin (Jiazhou) Bi
 thanks: "Code and data are available at: https://github.com/RohanAlexander/marriage."
-date: today
+date: Sept. 23, 2024
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
+jupyter: python3 
 number-sections: true
 bibliography: references.bib
 ---
 
-```{r}
+```{python}
 #| include: false
 #| warning: false
 #| message: false
 
-library(tidyverse)
+import pandas as pd
+# import numpy as np
+import matplotlib as plt
+# import seaborn as sns
 
-data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+data = pd.read_csv('/Users/jiazhoubi/Desktop/UT MI/INF 3104/reported-crime/data/analysis_data/analysis_data.csv')
+data.head()
 ```
 
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @kjlaskjasdnaf.
+You can and should cross-reference sections and sub-sections. We use @Python3 and @TorontoOpenData.
 
 The remainder of this paper is structured as follows. @sec-data....
 
