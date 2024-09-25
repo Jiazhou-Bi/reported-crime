@@ -91,6 +91,193 @@ This is the counts of crimes identified as cleared. In plain words, these are cr
 This column was not included in the raw dataset, but created by dividing the cleared crimes by total crimes. A higher case clearing rate for a particulat subtype of crime usually suggests higher effectiveness of law enforcements in dealing with this subtype of crime. The value is ranged from 0 to 100%.
 
 # Results
+## Trend of Reported Cases by Year
+During this ten-year-period (2014 - 2023), the overall counts of cases being reported in Toronto has increased significantly, from 113,426 in 2014 to 169,620 in 2023. Meanwhile, a noticable decrease of reported crime counts dropped in 2020 (118,568 cases) and 2021 (120,397 cases), compared to 2019 (144,529 cases). 
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+df = pd.read_csv('/Users/jiazhoubi/Desktop/UT MI/INF 3104/reported-crime/data/analysis_data/analysis_data.csv')
+
+grouped_by_year_df = df.groupby('REPORT_YEAR')['COUNT'].sum().reset_index()
+fig = go.Figure(data=[go.Table(
+    header=dict(values=list(grouped_by_year_df.columns),
+                fill_color='royalblue',
+                font=dict(color='white', size=14),
+                align='center',
+                height=30),  
+    cells=dict(values=[grouped_by_year_df.REPORT_YEAR, grouped_by_year_df.COUNT],
+               fill_color=[['lavender']*len(grouped_by_year_df), ['lightcyan']*len(grouped_by_year_df)], 
+               font=dict(color='black', size=12),
+               align='center',
+               height=25), 
+)])
+fig.update_layout(
+    title="Sum of Reported Cases by Year",
+    title_x=0.5, 
+    width=800, 
+    height=400, 
+    margin=dict(l=10, r=10, b=10, t=40) 
+)
+fig.show()
+plt.figure(figsize = (10,6))
+plt.plot(grouped_by_year_df['REPORT_YEAR'], grouped_by_year_df['COUNT'], marker = 'o', linestyle = 'solid')
+plt.xlabel('Year of The Cases Being Reported')
+plt.ylabel('Number of Caese Being Reported')
+plt.title('Count of Reported Cases by Year')
+plt.xticks(grouped_by_year_df['REPORT_YEAR'])
+plt.grid(True)
+plt.show()
+```
+
+## Trend of Reported Cases per Category by Year
+Among all the six categories, crimes against property has a significant higher count than all the other categories. In 2023, a total of 119,629 cases of crimes against property were reported, compared to the second highest count, which is crimes against ther person, with 29,892 cases. Below is a table of the count of reported crime for each category, for 2014, 2020, and 2023, as well as a line chart for the flucuating trend.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+df = pd.read_csv('/Users/jiazhoubi/Desktop/UT MI/INF 3104/reported-crime/data/analysis_data/analysis_data.csv')
+
+grouped_by_year_category_df = df.groupby(['REPORT_YEAR', 'CATEGORY'])['COUNT'].sum().reset_index()
+filtered_df = grouped_by_year_category_df[grouped_by_year_category_df['REPORT_YEAR'].isin([2014, 2020, 2023])]
+fig = go.Figure(data=[go.Table(
+    header=dict(values=["Year", "Category", "Count"],
+                fill_color='royalblue',
+                font=dict(color='white', size=14),
+                align='center',
+                height=30),
+    cells=dict(values=[filtered_df.REPORT_YEAR, 
+                       filtered_df.CATEGORY, 
+                       filtered_df.COUNT],
+               fill_color=[['lavender']*len(filtered_df), ['lightcyan']*len(filtered_df)],
+               font=dict(color='black', size=12),
+               align='center',
+               height=25),
+)])
+fig.update_layout(
+    title="Count of Reported Cases by Year and Category (2014, 2020, 2023)",
+    title_x=0.5,
+    width=800,
+    height=500,
+    margin=dict(l=10, r=10, b=10, t=40)
+)
+fig.show()
+
+plt.figure(figsize=(10, 6))
+for category in grouped_by_year_category_df['CATEGORY'].unique():
+    category_data = grouped_by_year_category_df[grouped_by_year_category_df['CATEGORY'] == category]
+    plt.plot(category_data['REPORT_YEAR'], category_data['COUNT'], marker='o', linestyle='solid', label=category)
+plt.xlabel('Year of The Cases Being Reported')
+plt.ylabel('Number of Cases Being Reported')
+plt.title('Count of Reported Cases by Year and Category')
+plt.xticks(grouped_by_year_category_df['REPORT_YEAR'].unique())
+plt.legend(title='Category')
+plt.grid(True)
+plt.show()
+```
+
+## Subtype of Crimes Against Property by Year and Their Gorwth Rates
+The overall pattern for each subtype of crimes under crimes against property is comparable to the overall reported crime pattern, with a increase from 2014 to 2023, despite a significant drop in 2020 and 2021. Among all the subtypes within crimes against property, the most common reported crime is theft under $5,000. For each subtype, the nominal growth rate between 2014 and 2023 is also calculated and attached here.
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+df = pd.read_csv('/Users/jiazhoubi/Desktop/UT MI/INF 3104/reported-crime/data/analysis_data/analysis_data.csv')
+
+crime_against_property_df = df[df['CATEGORY'] == 'Crimes Against Property']
+#crime_against_property_df.head()
+grouped_by_year_subtype_df = crime_against_property_df.groupby(['REPORT_YEAR','SUBTYPE'])['COUNT'].sum().reset_index()
+plt.figure(figsize=(10,6))
+for subtype in grouped_by_year_subtype_df['SUBTYPE'].unique():
+    subtype_data = grouped_by_year_subtype_df[grouped_by_year_subtype_df['SUBTYPE'] == subtype]
+    plt.plot(subtype_data['REPORT_YEAR'],subtype_data['COUNT'],marker = 'o', linestyle = 'solid', label=subtype)
+plt.xlabel('Year of The Cases Being Reported')
+plt.ylabel('Number of Cases Being Reported')
+plt.title('Count of Subtypes of Reported Crimes Against Property by Year and Category')
+plt.xticks(grouped_by_year_subtype_df['REPORT_YEAR'].unique())
+plt.legend(title='Subtype',loc = 'upper left',fontsize = 8)
+plt.grid(True)
+plt.show()
+
+data_2014 = grouped_by_year_subtype_df[grouped_by_year_subtype_df['REPORT_YEAR'] == 2014]
+data_2023 = grouped_by_year_subtype_df[grouped_by_year_subtype_df['REPORT_YEAR'] == 2023]
+merged_data_count = pd.merge(data_2014, data_2023, on='SUBTYPE', suffixes=('_2014', '_2023'))
+merged_data_count['percentage_increase'] = ((merged_data_count['COUNT_2023'] - merged_data_count['COUNT_2014']) / merged_data_count['COUNT_2014']) * 100
+merged_data_count[['SUBTYPE', 'COUNT_2014', 'COUNT_2023', 'percentage_increase']]
+merged_data_count['percentage_increase'] = merged_data_count['percentage_increase'].round(2)
+fig = go.Figure(data=[go.Table(
+    header=dict(values=["Subtype", "Count in 2014", "Count in 2023", "Percentage Increase"],
+                fill_color='royalblue',
+                font=dict(color='white', size=14),
+                align='center'),
+    cells=dict(values=[merged_data_count['SUBTYPE'], 
+                       merged_data_count['COUNT_2014'], 
+                       merged_data_count['COUNT_2023'], 
+                       merged_data_count['percentage_increase']],
+               fill_color=[['lavender']*len(merged_data_count), ['lightcyan']*len(merged_data_count)],
+               font=dict(color='black', size=12),
+               align='center'))
+])
+fig.update_layout(
+    title="Comparison of Reported Cases (2014 vs 2023) with Percentage Increase",
+    width=800,
+    height=600
+)
+fig.show()
+```
+
+## Crime Subtype Clear Rate from 2014 to 2023 and Its Trend
+Crime clearing rate has dropped for all subtypes of crimes against property from 2014 to 2023, ranging from a 10.25% decrease for break and enter to apartment, to 87.02% decrease for fraud. The trends and details are dipicted in the graph and table below.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.graph_objects as go
+df = pd.read_csv('/Users/jiazhoubi/Desktop/UT MI/INF 3104/reported-crime/data/analysis_data/analysis_data.csv')
+crime_against_property_df = df[df['CATEGORY'] == 'Crimes Against Property']
+
+grouped_by_year_subtype_df = crime_against_property_df.groupby(['REPORT_YEAR','SUBTYPE'])['CASE_CLEARING_RATE'].mean().reset_index()
+plt.figure(figsize=(10,6))
+for subtype in grouped_by_year_subtype_df['SUBTYPE'].unique():
+    subtype_data = grouped_by_year_subtype_df[grouped_by_year_subtype_df['SUBTYPE'] == subtype]
+    plt.plot(subtype_data['REPORT_YEAR'],subtype_data['CASE_CLEARING_RATE'],marker = 'o', linestyle = 'solid', label=subtype)
+plt.xlabel('Year of The Cases Being Reported')
+plt.ylabel('Clearing Rate of Cases Being Reported')
+plt.title('Clearing Rate of Subtypes of Reported Crimes Against Property by Year and Category')
+plt.xticks(grouped_by_year_subtype_df['REPORT_YEAR'].unique())
+plt.legend(title='Subtype',loc = 'upper left',fontsize = 8)
+plt.grid(True)
+plt.show()
+
+data_2014 = grouped_by_year_subtype_df[grouped_by_year_subtype_df['REPORT_YEAR'] == 2014]
+data_2023 = grouped_by_year_subtype_df[grouped_by_year_subtype_df['REPORT_YEAR'] == 2023]
+merged_data = pd.merge(data_2014, data_2023, on='SUBTYPE', suffixes=('_2014', '_2023'))
+merged_data['percentage_increase'] = ((merged_data['CASE_CLEARING_RATE_2023'] - merged_data['CASE_CLEARING_RATE_2014']) / merged_data['CASE_CLEARING_RATE_2014']) * 100
+merged_data[['SUBTYPE', 'CASE_CLEARING_RATE_2014', 'CASE_CLEARING_RATE_2023', 'percentage_increase']]
+merged_data['CASE_CLEARING_RATE_2014'] = merged_data['CASE_CLEARING_RATE_2014'].round(2)
+merged_data['CASE_CLEARING_RATE_2023'] = merged_data['CASE_CLEARING_RATE_2023'].round(2)
+merged_data['percentage_increase'] = merged_data['percentage_increase'].round(2)
+fig = go.Figure(data=[go.Table(
+    header=dict(values=["Subtype", "Case Clearing Rate in 2014", "Case Clearing Rate in 2023", "Percentage Increase (%)"],
+                fill_color='royalblue',
+                font=dict(color='white', size=14),
+                align='center'),
+    cells=dict(values=[merged_data['SUBTYPE'], 
+                       merged_data['CASE_CLEARING_RATE_2014'], 
+                       merged_data['CASE_CLEARING_RATE_2023'], 
+                       merged_data['percentage_increase']],
+               fill_color=[['lavender']*len(merged_data), ['lightcyan']*len(merged_data)],
+               font=dict(color='black', size=12),
+               align='center'))
+])
+fig.update_layout(
+    title="Case Clearing Rates (2014 vs 2023) with Percentage Increase",
+    width=800,
+    height=600
+)
+fig.show()
+```
 
 
 # Discussion
@@ -104,17 +291,6 @@ This column was not included in the raw dataset, but created by dividing the cle
 ## Weaknesses and next steps
 
 Weaknesses and next steps should also be included.
-
-\newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional data details
-
-
 
 \newpage
 
