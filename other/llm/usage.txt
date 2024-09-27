@@ -1,1 +1,0 @@
-Used ChatGPT 4-0 to produce Python code that was used for graphs.
