@@ -3,7 +3,7 @@ title: "Counts of Crimes and Their Subtypes in Toronto from 2014 to 2023"
 subtitle: "Details and Trends"
 author: 
   - Justin (Jiazhou) Bi
-thanks: "Inspired and instructed by: https://github.com/RohanAlexander/marriage."
+thanks: "Inspired and instructed by: https://github.com/RohanAlexander/marriage. All the project related files can be found at: https://github.com/Jiazhou-Bi/reported-crime/tree/master."
 date: Sept. 23, 2024
 date-format: long
 abstract: "This report analyzes crime trends and subtypes in Toronto from 2014 to 2023, highlighting fluctuations and speculating possible socio-economic, technological, and pandemic-related factors influencing criminal activity. Using data from Toronto Open Data, the study aggregates and examines reported crimes in categories such as property crimes, violent offenses, and cybercrime. The results show a significant increase in reported crimes, from 113,426 in 2014 to 169,620 in 2023. A notable drop in crime during 2020 and 2021 corresponds with COVID-19 lockdowns, which reduced certain physical crimes while increasing cybercrimes like fraud. Despite the overall rise in crime, clearance rates for crimes like fraud and theft significantly declined, underscoring challenges for law enforcement."
